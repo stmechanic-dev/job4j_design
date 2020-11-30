@@ -5,17 +5,15 @@ import java.util.Objects;
 
 public class SimpleArray<T> implements Iterable<T> {
     private T[] data;
+    private int count = 0;
 
     public SimpleArray(T[] data) {
         this.data = data;
     }
 
     public void add(T model) {
-        for (int i = 0; i < data.length; i++) {
-            if (data[i] == null) {
-                data[i] = model;
-            }
-        }
+        data[count] = model;
+        count++;
     }
 
     public void set(int index, T model) {
@@ -41,7 +39,7 @@ public class SimpleArray<T> implements Iterable<T> {
 
             @Override
             public boolean hasNext() {
-                return n < data.length;
+                return n < data.length && data[n] != null;
             }
 
             @Override
