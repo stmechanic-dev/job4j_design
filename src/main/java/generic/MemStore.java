@@ -2,6 +2,7 @@ package generic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public final class MemStore<T extends Base> implements Store<T> {
 
@@ -14,36 +15,41 @@ public final class MemStore<T extends Base> implements Store<T> {
 
     @Override
     public boolean replace(String id, T model) {
-        try {
-            int n = Integer.parseInt(id);
+        int n = findByIndex(id);
+        if (n == -1) {
+            return false;
+        } else {
             mem.set(n, model);
             return true;
-        } catch (NumberFormatException e) {
-            System.out.println("Incorrect string format!");
         }
-        return false;
     }
 
     @Override
     public boolean delete(String id) {
-        try {
-            int n = Integer.parseInt(id);
+        int n = findByIndex(id);
+        if (n == -1) {
+            return false;
+        } else {
             mem.remove(n);
             return true;
-        } catch (NumberFormatException e) {
-            System.out.println("Incorrect string format!");
         }
-        return false;
     }
 
     @Override
     public T findById(String id) {
-        int n = 0;
-        try {
-            n = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            System.out.println("Incorrect string format!");
+        int n = findByIndex(id);
+        if (n != -1) {
+            return mem.get(n);
+        } else {
+            throw new NoSuchElementException("Incorrect id!");
         }
-        return mem.get(n);
+    }
+
+    private int findByIndex(String id) {
+        return mem.stream()
+                .map(Base::getId)
+                .map(x -> x.indexOf(id))
+                .findFirst()
+                .orElse(-1);
     }
 }
