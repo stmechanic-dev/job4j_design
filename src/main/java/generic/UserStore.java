@@ -1,7 +1,6 @@
 package generic;
 
 public class UserStore implements Store<User> {
-
     private final Store<User> store = new MemStore<>();
 
     @Override

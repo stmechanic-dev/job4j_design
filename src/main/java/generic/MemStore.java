@@ -2,7 +2,6 @@ package generic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public final class MemStore<T extends Base> implements Store<T> {
 
@@ -18,10 +17,9 @@ public final class MemStore<T extends Base> implements Store<T> {
         int n = findByIndex(id);
         if (n == -1) {
             return false;
-        } else {
-            mem.set(n, model);
-            return true;
         }
+        mem.set(n, model);
+        return true;
     }
 
     @Override
@@ -29,10 +27,9 @@ public final class MemStore<T extends Base> implements Store<T> {
         int n = findByIndex(id);
         if (n == -1) {
             return false;
-        } else {
-            mem.remove(n);
-            return true;
         }
+        mem.remove(n);
+        return true;
     }
 
     @Override
@@ -40,16 +37,18 @@ public final class MemStore<T extends Base> implements Store<T> {
         int n = findByIndex(id);
         if (n != -1) {
             return mem.get(n);
-        } else {
-            throw new NoSuchElementException("Incorrect id!");
         }
+        return null;
     }
 
     private int findByIndex(String id) {
-        return mem.stream()
-                .map(Base::getId)
-                .map(x -> x.indexOf(id))
-                .findFirst()
-                .orElse(-1);
+        int index = -1;
+        for (int i = 0; i < mem.size(); i++) {
+            if (mem.get(i).getId().equals(id)){
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 }
