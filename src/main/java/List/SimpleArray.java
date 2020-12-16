@@ -17,11 +17,8 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     public void add(T model) {
-        Object[] tmp;
         if (count == container.length) {
-            tmp = container;
-            container = new Object[count + 1];
-            System.arraycopy(tmp, 0, container, 0, container.length);
+            expand();
         }
         container[count++] = model;
         modCount++;
@@ -47,5 +44,11 @@ public class SimpleArray<T> implements Iterable<T> {
                 return (T) container[point++];
             }
         };
+    }
+
+    private void expand() {
+        Object[] tmp = container;
+        container = new Object[count + 10];
+        System.arraycopy(tmp, 0, container, 0, container.length);
     }
 }
