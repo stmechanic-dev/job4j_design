@@ -48,7 +48,7 @@ public class SimpleArray<T> implements Iterable<T> {
 
     private void expand() {
         Object[] tmp = container;
-        container = new Object[count + 10];
+        container = new Object[count * 2];
         System.arraycopy(tmp, 0, container, 0, container.length);
     }
 }
