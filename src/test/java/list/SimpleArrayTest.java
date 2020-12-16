@@ -1,4 +1,4 @@
-package List;
+package list;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;

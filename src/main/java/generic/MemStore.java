@@ -44,7 +44,7 @@ public final class MemStore<T extends Base> implements Store<T> {
     private int findByIndex(String id) {
         int index = -1;
         for (int i = 0; i < mem.size(); i++) {
-            if (mem.get(i).getId().equals(id)){
+            if (mem.get(i).getId().equals(id)) {
                 index = i;
                 break;
             }
