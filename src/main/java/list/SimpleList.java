@@ -6,37 +6,42 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class SimpleList<E> implements Iterable<E> {
-    private Node[] container = new Node[10];
-    Node<E> node;
-    private int point;
-    private int count = 0;
+    private Node<E> head;
     private int modCount = 0;
 
-    public E get(int index) {
-        Objects.checkIndex(index, count);
-        return (E) container[index];
+    public void add(E value) {
+        Node<E> node = new Node<>(value, null);
+        if (head == null) {
+            head = node;
+            modCount++;
+            return;
+        }
+        Node<E> tail = head;
+        while (tail.next != null) {
+            tail = tail.next;
+        }
+        tail.next = node;
+        modCount++;
     }
 
-    public void add(E model) {
-        if (count == container.length) {
-            expand();
+    public E get(int index) {
+        Objects.checkIndex(index, modCount);
+        Node<E> node = head;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
         }
-        if (container[0] == null) {
-            node = new Node<>(null, model, null);
-        } else {
-            node = new Node<E>(container[count - 1], model, null);
-        }
-        modCount++;
-
+        return node.item;
     }
 
     @Override
     public Iterator<E> iterator() {
         int expectedCount = modCount;
         return new Iterator<>() {
+            Node<E> node = head;
+
             @Override
             public boolean hasNext() {
-                return container[point] != null;
+                return node != null;
             }
 
             @Override
@@ -47,26 +52,20 @@ public class SimpleList<E> implements Iterable<E> {
                 if (expectedCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return (E) container[point++];
+                E value = node.item;
+                node = node.next;
+                return value;
             }
         };
-    }
-
-    private void expand() {
-        Object[] tmp = container;
-        container = new Node[count * 2];
-        System.arraycopy(tmp, 0, container, 0, container.length);
     }
 
     private static class Node<E> {
         E item;
         Node<E> next;
-        Node<E> prev;
 
-        Node(Node<E> prev, E element, Node<E> next) {
+        Node(E element, Node<E> next) {
             this.item = element;
             this.next = next;
-            this.prev = prev;
         }
     }
 }
