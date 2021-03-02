@@ -40,10 +40,9 @@ public class ForwardLinked<T> implements Iterable<T> {
             return tail.value;
         }
         while (tail.next != null) {
+            prevLast = tail;
             tail = tail.next;
-            if (tail.next != null) {
-                prevLast = tail;
-            }
+
         }
         prevLast.next = null;
         return tail.value;
