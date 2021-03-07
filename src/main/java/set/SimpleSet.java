@@ -12,11 +12,7 @@ public class SimpleSet<E> implements Iterable<E> {
 
     public boolean add(E e) {
         for (int i = 0; i < countSize; i++) {
-            if (Objects.isNull(e)) {
-                if (null == set.get(i)) {
-                    return false;
-                }
-            } else if (e.equals(set.get(i))) {
+            if (Objects.equals(e, set.get(i))) {
                 return false;
             }
         }
